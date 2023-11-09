@@ -1,5 +1,6 @@
 import type { MetaFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { Link, useNavigate } from "@remix-run/react";
+import React from "react";
 
 import { useOptionalUser } from "~/utils";
 
@@ -7,9 +8,21 @@ export const meta: MetaFunction = () => [{ title: "Remix Notes" }];
 
 export default function Index() {
   const user = useOptionalUser();
+
+  const navigate = useNavigate();
+
+  // If authenticated, redirect to the notes page
+  React.useEffect(() => {
+    if (user) {
+      navigate("/notes");
+    } else {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
   return (
     <main className="relative min-h-screen bg-white sm:flex sm:items-center sm:justify-center">
-      <div className="relative sm:pb-16 sm:pt-8">
+      {/* <div className="relative sm:pb-16 sm:pt-8">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="relative shadow-xl sm:overflow-hidden sm:rounded-2xl">
             <div className="absolute inset-0">
@@ -135,7 +148,7 @@ export default function Index() {
             ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </main>
   );
 }
